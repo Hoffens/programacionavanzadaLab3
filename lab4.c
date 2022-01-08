@@ -69,13 +69,13 @@ int main()
     Lista->end = p5;
 */
     //view_list(Lista);
-    //leer_archivo(Lista);
+    leer_archivo(Lista);
 
-
+    /*
     add_element(Lista,  1,  4);
     add_element(Lista,  2,  3);
     add_element(Lista,  3,  2);
-    add_element(Lista,  4,  1);
+    add_element(Lista,  4,  1);*/
     view_list(Lista);
     return 0;
 }
@@ -96,10 +96,10 @@ void leer_archivo(LE *lista)
     long x, y;
     int n = 0;
 
-    printf("Ingrese nombre del archivo (con extension, ejemplo: matriz.txt): ");
-    scanf("%s", nombreArchivo);
+    //printf("Ingrese nombre del archivo (con extension, ejemplo: matriz.txt): ");
+   // scanf("%s", nombreArchivo);
 
-    archivo = fopen(nombreArchivo, "r");
+    archivo = fopen("archivo1", "r");
 
     if (archivo == NULL)
     {
@@ -107,7 +107,7 @@ void leer_archivo(LE *lista)
     }
     else
     {
-        while ((bus = fgetc(archivo)) != ' ' || bus != '\n')
+        while ((bus = fgetc(archivo)) != '\n' )
         {
             if (bus != ' ' || bus != '\n')
                 n = n * 10 + (int)bus - 48;
@@ -115,15 +115,16 @@ void leer_archivo(LE *lista)
 
         for (int i = 0; i < n; i++)
         {
+            x=0, y=0;
             while ((bus = fgetc(archivo)) != ' ')
             {
                 // if (bus != '\n')
-                x = x * 10 + (long long)bus - 48;
+                x = x * 10 + (long )bus - 48;
             }
-            while ((bus = fgetc(archivo)) != ' ' || bus != '\n')
+            while ((bus = fgetc(archivo)) != '\n')
             {
                 // if (bus != '\n')
-                y = y * 10 + (long long)bus - 48;
+                y = y * 10 + (long )bus - 48;
             }
             add_element(lista,  x,  y);
         }
@@ -151,7 +152,7 @@ void add_element(LE *lista, long x, long y)
     {
 
         elemento->pre = lista->end;
-        elemento->pre->post= elemento;
+        elemento->pre->post=elemento;
         elemento->post = NULL;
         lista->end = elemento;
         lista->n = lista->n + 1;
