@@ -4,3 +4,4 @@
 *.exe
 *.json
 *.json
+.vscode/launch.json

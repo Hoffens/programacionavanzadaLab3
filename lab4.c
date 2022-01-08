@@ -22,7 +22,7 @@ void Quicksort_x();
 void add_element(LE *lista, long x, long y);
 void leer_archivo(LE *lista);
 void view_list(LE *lista);
-
+void intercambiar(Bloque *elemento1, Bloque *elemento2);
 int main()
 {
     Bloque *p1, *p2, *p3, *p4, *p5;
@@ -170,5 +170,26 @@ void view_list(LE *lista){
     }    
 }
 
+
+void intercambiar(Bloque *elemento1, Bloque *elemento2){
+
+    Bloque *post1=elemento1->post;
+    Bloque *pre1=elemento1->pre;
+
+    Bloque *post2=elemento2->post;
+    Bloque *pre2=elemento2->pre;
+
+    post1->pre=elemento2;
+    pre1->post=elemento2;
+    elemento2->post=post1;
+    elemento2->pre=pre1;
+
+
+    post2->pre=elemento1;
+    pre2->post=elemento1;
+    elemento1->post=post2;
+    elemento1->pre=pre2;
+
+}
 
 
