@@ -15,7 +15,7 @@ typedef struct LE // lista enlazada
 {
     Bloque *init; // primer elemento de la lista
     Bloque *end;  // ultimo elemento de la lista
-    int n;        // largo n de la lista
+    int n;        // largo n de la listaJ
 } LE;
 
 void Quicksort_x();
@@ -72,10 +72,10 @@ int main()
     //leer_archivo(Lista);
 
 
-    add_element(Lista,  1,  2);
-    add_element(Lista,  2,  2);
+    add_element(Lista,  1,  4);
+    add_element(Lista,  2,  3);
     add_element(Lista,  3,  2);
-    add_element(Lista,  4,  52);
+    add_element(Lista,  4,  1);
     view_list(Lista);
     return 0;
 }
@@ -151,6 +151,7 @@ void add_element(LE *lista, long x, long y)
     {
 
         elemento->pre = lista->end;
+        elemento->pre->post= elemento;
         elemento->post = NULL;
         lista->end = elemento;
         lista->n = lista->n + 1;
