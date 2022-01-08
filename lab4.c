@@ -67,11 +67,14 @@ int main()
     Lista->init = p1;
     Lista->end = p5;    
 
+
+
     Bloque *aux = Lista->init;
     for (int i = 0; i < Lista->n; i++)
     {
         printf("(x, y) = (%ld, %ld)\n", aux->x, aux->y);
         aux = aux->post;
+
     }
 
     return 0;
@@ -80,4 +83,54 @@ int main()
 void Quicksort_x()
 {
 
+}
+
+void leer_archivo(LE *lista){
+
+    char nombreArchivo[30];
+    FILE *archivo;
+
+    char bus;
+    long x,y;
+    int n = 0;
+
+    printf("Ingrese nombre del archivo (con extension, ejemplo: matriz.txt): ");
+    scanf("%s", nombreArchivo);
+
+    archivo = fopen(nombreArchivo, "r");
+
+    
+
+    if (archivo == NULL)
+    {
+        printf("\nError de apertura del archivo. \n\n");
+    }
+    else
+    {
+        while ((bus = fgetc(archivo)) != ' ' || bus!='\n')
+        {
+            if (bus != ' ' || bus!='\n')
+                n = n * 10 + (int)bus - 48;
+        }
+        lista->n=n;
+        
+
+        for (int i=0; i<n; i++)
+        {
+        while ((bus = fgetc(archivo)) != ' ' )
+        {
+            // if (bus != '\n')
+            x = x * 10 + (long long)bus - 48;
+        }
+        while ((bus = fgetc(archivo)) != ' ' || bus!='\n')
+        {
+            // if (bus != '\n')
+            y = y * 10 + (long long)bus - 48;
+        }
+        
+        
+        }
+
+        
+    }
 }
