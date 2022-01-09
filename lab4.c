@@ -3,6 +3,7 @@
 //#include <math.h> /* funciones matematicas basicas como floor, ceil, log2, etc. */
 #include <time.h> /* medicion de tiempo */
 
+
 typedef struct Bloque
 {
     long x;
@@ -11,29 +12,34 @@ typedef struct Bloque
     struct Bloque *post; // bloque siguiente
 } Bloque;
 
+
 typedef struct LE // lista enlazada
 {
     Bloque *init; // primer elemento de la lista
     Bloque *end;  // ultimo elemento de la lista
-    int n;        // largo n de la listaJ
+    int n;        // largo n de la lista
 } LE;
 
 
-//QuickSort en x
+// QuickSort en x
 void Quicksort_x(Bloque *left, Bloque *right);
 Bloque *Dividir_x(Bloque *left, Bloque *right);
-//QuickSort en y
+// QuickSort en y
 void Quicksort_y(Bloque *left, Bloque *right);
 Bloque *Dividir_y(Bloque *left, Bloque *right);
+// Sublistado de lista que satisface cotas dadas
+LE *sublistado(LE *lista, long cota_inf, long cota_sup, int x);
+// Agrega un elemento a la lista
 void add_element(LE *lista, long x, long y);
+// Lee un archivo y carga sus puntos a una lista
 void leer_archivo(LE *lista);
+// Imprime en pantalla una lista
 void view_list(LE *lista);
 
 
 int main()
 {
     LE *Lista;
-    
     Lista = (LE *)malloc(sizeof(LE));
     Lista->init = NULL;
     Lista->end = NULL;
@@ -45,10 +51,17 @@ int main()
     printf("\n---------------------------\n");
     printf("Lista ordenada en x:\n");
     view_list(Lista);
+
+    /*
     printf("\n---------------------------\n");
     printf("Lista ordenada en y:\n");
     Quicksort_y(Lista->init, Lista->end);
     view_list(Lista);
+    */
+    printf("\n---------------------------\n");
+    printf("Sublistado cotas 10<y<50:\n");
+    LE *subListado = sublistado(Lista, 10, 50, 0);
+    view_list(subListado);
 
     return 0;
 }
@@ -136,6 +149,32 @@ void Quicksort_y(Bloque *left, Bloque *right)
 }
 
 
+LE *sublistado(LE *lista, long cota_inf, long cota_sup, int x)
+{   
+    LE *subListado;
+    subListado = (LE *)malloc(sizeof(LE));
+    subListado->init = NULL;
+    subListado->end = NULL;
+    Bloque *elem = lista->init;
+
+    for (int i = 0; i < lista->n; i++)
+    {
+
+        if (x == 1 && elem->x >= cota_inf && elem->x <= cota_sup)  
+        {
+            add_element(subListado, elem->x, elem->y);
+        }
+        else if (x == 0 && elem->y >= cota_inf && elem->y <= cota_sup)
+        {
+            add_element(subListado, elem->x, elem->y);
+        }
+        
+        elem = elem->post;
+    }
+    return subListado;
+}
+
+
 void leer_archivo(LE *lista)
 {
 
@@ -151,7 +190,7 @@ void leer_archivo(LE *lista)
     // printf("Ingrese nombre del archivo (con extension, ejemplo: matriz.txt): ");
     // scanf("%s", nombreArchivo);
 
-    archivo = fopen("archivo1", "r");
+    archivo = fopen("archivo2.txt", "r");
 
     if (archivo == NULL)
     {
