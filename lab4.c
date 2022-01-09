@@ -76,9 +76,9 @@ void Quicksort_x(LE *lista, Bloque *init, Bloque *end)
                 //izq = der;
                 //der = aux;
                 //izq = izq->post;
-                intercambiar(izq, der, lista);
-                view_list(lista);
-                /*
+                //intercambiar(izq, der, lista);
+                //view_list(lista);
+                
                 long aux_x = izq->x;
                 long aux_y = izq->y;
                 izq->x = der->x;
@@ -86,7 +86,7 @@ void Quicksort_x(LE *lista, Bloque *init, Bloque *end)
                 der->x = aux_x;
                 der->y = aux_y;
                 izq = izq->post;
-                */
+                
             }
 
             while (izq != der && izq->x < pivot->x)
@@ -103,10 +103,10 @@ void Quicksort_x(LE *lista, Bloque *init, Bloque *end)
                 der = aux;
                 izq = izq->post;
                 */
-                intercambiar(der, izq, lista);
-                view_list(lista);
+                //intercambiar(der, izq, lista);
+                //view_list(lista);
 
-                /*
+                
                 long aux_x = der->x;
                 long aux_y = der->y;
                 der->x = izq->x;
@@ -114,7 +114,7 @@ void Quicksort_x(LE *lista, Bloque *init, Bloque *end)
                 izq->x = aux_x;
                 izq->y = aux_y;
                 der = der->pre;
-                */
+                
             }
         }
         der = pivot;
