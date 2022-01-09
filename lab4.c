@@ -19,11 +19,15 @@ typedef struct LE // lista enlazada
 } LE;
 
 
-void Quicksort_x(Bloque *init, Bloque *end);
+//QuickSort en x
+void Quicksort_x(Bloque *left, Bloque *right);
+Bloque *Dividir_x(Bloque *left, Bloque *right);
+//QuickSort en y
+void Quicksort_y(Bloque *left, Bloque *right);
+Bloque *Dividir_y(Bloque *left, Bloque *right);
 void add_element(LE *lista, long x, long y);
 void leer_archivo(LE *lista);
 void view_list(LE *lista);
-void intercambiar(Bloque *elemento1, Bloque *elemento2, LE *lista);
 
 
 int main()
@@ -39,100 +43,95 @@ int main()
     view_list(Lista);
     Quicksort_x(Lista->init, Lista->end);
     printf("\n---------------------------\n");
+    printf("Lista ordenada en x:\n");
     view_list(Lista);
-
-    //intercambiar(Lista->init->post->post,Lista->end->pre->pre,Lista);
-    //printf("\n\n\n");
-    //view_list(Lista);
+    printf("\n---------------------------\n");
+    printf("Lista ordenada en y:\n");
+    Quicksort_y(Lista->init, Lista->end);
+    view_list(Lista);
 
     return 0;
 }
 
 
-void Quicksort_x(Bloque *init, Bloque *end)
+Bloque *Dividir_x(Bloque *left, Bloque *right) 
 {
-    Bloque *pivot, *izq, *der;
-
-    if (init != end)     
+    Bloque *pivot = right;
+    Bloque *i = left->pre;
+    
+    for (Bloque *ptr = left; ptr != right; ptr = ptr->post)
     {
-        pivot = init;   // el pivote será el primer elemento
-        izq = pivot;    // elemento mas a la izquierda de la lista
-        
-        // se ubicaran los elementos a la izq y der del pivot
-        der = end;  
-
-        while (izq != der)
+        if (ptr->x <= pivot->x)     // comparamos en coordenada x
         {
-            while (izq != der && der->x > pivot->x)
-            {
-                der = der->pre;
-            }
-            printf("\n---------------------------\n");
-            //printf("(x, y) = (%ld, %ld)\n", der->x, der->y);
-
-            if (izq != der)
-            {
-                //Bloque *aux = (Bloque *)malloc(sizeof(Bloque));
-                //aux = izq;
-                //izq = der;
-                //der = aux;
-                //izq = izq->post;
-                //intercambiar(izq, der, lista);
-                //view_list(lista);
-                
-                printf("izq antes (x, y) = (%ld, %ld)\n", izq->x, izq->y);
-
-                long aux_x = izq->x;
-                long aux_y = izq->y;
-                izq->x = der->x;
-                izq->y = der->y;
-                der->x = aux_x;
-                der->y = aux_y;
-                printf("izq dps de cambiar (x, y) = (%ld, %ld)\n", izq->x, izq->y);
-
-                izq = izq->post;
-                printf("siguiene de izq (x, y) = (%ld, %ld)\n", izq->x, izq->y);
-                printf("der (x, y) = (%ld, %ld)\n", der->x, der->y);
-                printf("der pre (x, y) = (%ld, %ld)\n", der->pre->x, der->pre->y);
-
-                printf("der post (x, y) = (%ld, %ld)\n", der->post->x, der->post->y);
-
-
-                
-            }
-
-            while (izq != der && izq->x < pivot->x)
-            {
-                izq = izq->post;
-            }
-
-            if (izq != der)
-            {   
-                /*
-                Bloque *aux = (Bloque *)malloc(sizeof(Bloque));
-                aux = izq;
-                izq = der;
-                der = aux;
-                izq = izq->post;
-                */
-                //intercambiar(der, izq, lista);
-                //view_list(lista);
-
-                
-                long aux_x = der->x;
-                long aux_y = der->y;
-                der->x = izq->x;
-                der->y = izq->y;
-                izq->x = aux_x;
-                izq->y = aux_y;
-                der = der->pre;
-                
-            }
+            i = (i == NULL ? left : i->post);
+            long temp_x = i->x;
+            long temp_y = i->y;
+            i->x = ptr->x;
+            i->y = ptr->y;
+            ptr->x = temp_x;
+            ptr->y = temp_y;
         }
-        der = pivot;
-        printf("aaa");
-        Quicksort_x(init, der->pre);
-        Quicksort_x(der->post, end);
+    }
+
+    i = (i == NULL ? left : i->post);  
+    long temp_x = i->x;
+    long temp_y = i->y;
+    i->x = pivot->x;
+    i->y = pivot->y;
+    pivot->x = temp_x;
+    pivot->y = temp_y;
+    return i;
+}
+
+
+Bloque *Dividir_y(Bloque *left, Bloque *right) 
+{
+    Bloque *pivot = right;
+    Bloque *i = left->pre;
+    
+    for (Bloque *ptr = left; ptr != right; ptr = ptr->post)
+    {
+        if (ptr->y <= pivot->y)     // comparamos en coordenada y
+        {
+            i = (i == NULL ? left : i->post);
+            long temp_x = i->x;
+            long temp_y = i->y;
+            i->x = ptr->x;
+            i->y = ptr->y;
+            ptr->x = temp_x;
+            ptr->y = temp_y;
+        }
+    }
+
+    i = (i == NULL ? left : i->post);  
+    long temp_x = i->x;
+    long temp_y = i->y;
+    i->x = pivot->x;
+    i->y = pivot->y;
+    pivot->x = temp_x;
+    pivot->y = temp_y;
+    return i;
+}
+
+
+void Quicksort_x(Bloque *left, Bloque *right)
+{
+    if (right != NULL && left != right && left != right->post)  
+    {
+        Bloque *p = Dividir_x(left, right); 
+        Quicksort_x(left, p->pre);
+        Quicksort_x(p->post, right);
+    }
+}
+
+
+void Quicksort_y(Bloque *left, Bloque *right)
+{
+    if (right != NULL && left != right && left != right->post)  
+    {
+        Bloque *p = Dividir_y(left, right); 
+        Quicksort_y(left, p->pre);
+        Quicksort_y(p->post, right);
     }
 }
 
@@ -215,42 +214,10 @@ void add_element(LE *lista, long x, long y)
 
 void view_list(LE *lista)
 {
-
     Bloque *aux = lista->init;
     for (int i = 0; i < lista->n; i++)
     {
         printf("(x, y) = (%ld, %ld)\n", aux->x, aux->y);
         aux = aux->post;
     }
-}
-
-
-void intercambiar(Bloque *elemento1, Bloque *elemento2, LE *lista)
-{
-
-    Bloque *post1 = elemento1->post;
-    Bloque *pre1 = elemento1->pre;
-
-    Bloque *post2 = elemento2->post;
-    Bloque *pre2 = elemento2->pre;
-
-    post1->pre = elemento2;
-    pre1->post = elemento2;
-    elemento2->post = post1;
-    elemento2->pre = pre1;
-
-    post2->pre = elemento1;
-    pre2->post = elemento1;
-    elemento1->post = post2;
-    elemento1->pre = pre2;
-
-    if (elemento1->post == NULL)
-        lista->end = elemento1;
-    if (elemento1->pre == NULL)
-        lista->init = elemento1;
-
-    if (elemento2->post == NULL)
-        lista->end = elemento2;
-    if (elemento2->pre == NULL)
-        lista->init = elemento2;
 }
