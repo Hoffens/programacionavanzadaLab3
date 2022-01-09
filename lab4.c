@@ -18,11 +18,14 @@ typedef struct LE // lista enlazada
     int n;        // largo n de la listaJ
 } LE;
 
-void Quicksort_x();
+
+void Quicksort_x(LE *lista, Bloque *init, Bloque *end);
 void add_element(LE *lista, long x, long y);
 void leer_archivo(LE *lista);
 void view_list(LE *lista);
 void intercambiar(Bloque *elemento1, Bloque *elemento2, LE *lista);
+
+
 int main()
 {
     LE *Lista;
@@ -34,16 +37,92 @@ int main()
 
     leer_archivo(Lista);
     view_list(Lista);
-    intercambiar(Lista->init->post->post,Lista->end->pre->pre,Lista);
-    printf("\n\n\n");
+    Quicksort_x(Lista, Lista->init, Lista->end);
+    printf("\n---------------------------\n");
     view_list(Lista);
+    //intercambiar(Lista->init->post->post,Lista->end->pre->pre,Lista);
+    //printf("\n\n\n");
+    //view_list(Lista);
 
     return 0;
 }
 
-void Quicksort_x()
+
+void Quicksort_x(LE *lista, Bloque *init, Bloque *end)
 {
+    Bloque *pivot, *izq, *der;
+
+    if (init != end)     
+    {
+        pivot = init;   // el pivote será el primer elemento
+        izq = pivot;    // elemento mas a la izquierda de la lista
+        
+        // se ubicaran los elementos a la izq y der del pivot
+        der = end;  
+
+        while (izq != der)
+        {
+            while (izq != der && der->x > pivot->x)
+            {
+                der = der->pre;
+            }
+            printf("\n---------------------------\n");
+            printf("(x, y) = (%ld, %ld)\n", der->x, der->y);
+
+            if (izq != der)
+            {
+                //Bloque *aux = (Bloque *)malloc(sizeof(Bloque));
+                //aux = izq;
+                //izq = der;
+                //der = aux;
+                //izq = izq->post;
+                intercambiar(izq, der, lista);
+                view_list(lista);
+                /*
+                long aux_x = izq->x;
+                long aux_y = izq->y;
+                izq->x = der->x;
+                izq->y = der->y;
+                der->x = aux_x;
+                der->y = aux_y;
+                izq = izq->post;
+                */
+            }
+
+            while (izq != der && izq->x < pivot->x)
+            {
+                izq = izq->post;
+            }
+
+            if (izq != der)
+            {   
+                /*
+                Bloque *aux = (Bloque *)malloc(sizeof(Bloque));
+                aux = izq;
+                izq = der;
+                der = aux;
+                izq = izq->post;
+                */
+                intercambiar(der, izq, lista);
+                view_list(lista);
+
+                /*
+                long aux_x = der->x;
+                long aux_y = der->y;
+                der->x = izq->x;
+                der->y = izq->y;
+                izq->x = aux_x;
+                izq->y = aux_y;
+                der = der->pre;
+                */
+            }
+        }
+        der = pivot;
+        Quicksort_x(lista, init, der->pre);
+        Quicksort_x(lista, der->post, end);
+    }
 }
+
 
 void leer_archivo(LE *lista)
 {
@@ -94,6 +173,7 @@ void leer_archivo(LE *lista)
     fclose(archivo);
 }
 
+
 void add_element(LE *lista, long x, long y)
 {
     // constructor elemento
@@ -111,7 +191,6 @@ void add_element(LE *lista, long x, long y)
     }
     else
     {
-
         elemento->pre = lista->end;
         elemento->pre->post = elemento;
         elemento->post = NULL;
@@ -119,6 +198,7 @@ void add_element(LE *lista, long x, long y)
         lista->n = lista->n + 1;
     }
 }
+
 
 void view_list(LE *lista)
 {
@@ -130,6 +210,7 @@ void view_list(LE *lista)
         aux = aux->post;
     }
 }
+
 
 void intercambiar(Bloque *elemento1, Bloque *elemento2, LE *lista)
 {
