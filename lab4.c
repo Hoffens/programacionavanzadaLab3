@@ -221,8 +221,13 @@ void intercambiar(Bloque *elemento1, Bloque *elemento2, LE *lista)
     Bloque *post2 = elemento2->post;
     Bloque *pre2 = elemento2->pre;
 
+    if(pre1!=NULL)
+        
     post1->pre = elemento2;
-    pre1->post = elemento2;
+    if(pre1!=NULL)
+        pre1->post = elemento2;
+
+    
     elemento2->post = post1;
     elemento2->pre = pre1;
 
