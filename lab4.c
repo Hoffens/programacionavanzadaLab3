@@ -19,7 +19,7 @@ typedef struct LE // lista enlazada
 } LE;
 
 
-void Quicksort_x(LE *lista, Bloque *init, Bloque *end);
+void Quicksort_x(Bloque *init, Bloque *end);
 void add_element(LE *lista, long x, long y);
 void leer_archivo(LE *lista);
 void view_list(LE *lista);
@@ -37,9 +37,10 @@ int main()
 
     leer_archivo(Lista);
     view_list(Lista);
-    Quicksort_x(Lista, Lista->init, Lista->end);
+    Quicksort_x(Lista->init, Lista->end);
     printf("\n---------------------------\n");
     view_list(Lista);
+
     //intercambiar(Lista->init->post->post,Lista->end->pre->pre,Lista);
     //printf("\n\n\n");
     //view_list(Lista);
@@ -48,7 +49,7 @@ int main()
 }
 
 
-void Quicksort_x(LE *lista, Bloque *init, Bloque *end)
+void Quicksort_x(Bloque *init, Bloque *end)
 {
     Bloque *pivot, *izq, *der;
 
@@ -67,7 +68,7 @@ void Quicksort_x(LE *lista, Bloque *init, Bloque *end)
                 der = der->pre;
             }
             printf("\n---------------------------\n");
-            printf("(x, y) = (%ld, %ld)\n", der->x, der->y);
+            //printf("(x, y) = (%ld, %ld)\n", der->x, der->y);
 
             if (izq != der)
             {
@@ -79,13 +80,24 @@ void Quicksort_x(LE *lista, Bloque *init, Bloque *end)
                 //intercambiar(izq, der, lista);
                 //view_list(lista);
                 
+                printf("izq antes (x, y) = (%ld, %ld)\n", izq->x, izq->y);
+
                 long aux_x = izq->x;
                 long aux_y = izq->y;
                 izq->x = der->x;
                 izq->y = der->y;
                 der->x = aux_x;
                 der->y = aux_y;
+                printf("izq dps de cambiar (x, y) = (%ld, %ld)\n", izq->x, izq->y);
+
                 izq = izq->post;
+                printf("siguiene de izq (x, y) = (%ld, %ld)\n", izq->x, izq->y);
+                printf("der (x, y) = (%ld, %ld)\n", der->x, der->y);
+                printf("der pre (x, y) = (%ld, %ld)\n", der->pre->x, der->pre->y);
+
+                printf("der post (x, y) = (%ld, %ld)\n", der->post->x, der->post->y);
+
+
                 
             }
 
@@ -118,8 +130,9 @@ void Quicksort_x(LE *lista, Bloque *init, Bloque *end)
             }
         }
         der = pivot;
-        Quicksort_x(lista, init, der->pre);
-        Quicksort_x(lista, der->post, end);
+        printf("aaa");
+        Quicksort_x(init, der->pre);
+        Quicksort_x(der->post, end);
     }
 }
 
