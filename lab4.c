@@ -3,7 +3,9 @@
 //#include <math.h> /* funciones matematicas basicas como floor, ceil, log2, etc. */
 #include <time.h> /* medicion de tiempo */
 
+
 #define NMAX 10000000
+
 
 typedef struct Bloque
 {
@@ -38,6 +40,8 @@ void add_random_element(LE *lista);
 int leer_archivo(LE *lista);
 // Imprime en pantalla una lista
 void view_list(LE *lista);
+// Libera la memoria de la lista
+void liberar_memoria(LE *lista);
 
 
 int main()
@@ -81,11 +85,25 @@ int main()
             case 1:
                 do 
                 {   
+                    if (Lista->init != NULL)
+                    {
+                        liberar_memoria(Lista);
+                        Lista = (LE *)malloc(sizeof(LE));
+                        Lista->init = NULL;
+                        Lista->end = NULL;
+                    }
                     printf("-----------------------------------------------\n");
                     int isOk = leer_archivo(Lista); 
                 } while (isOk == 1);
                 break;
             case 2:
+                if (Lista->init != NULL)
+                {
+                    liberar_memoria(Lista);
+                    Lista = (LE *)malloc(sizeof(LE));
+                    Lista->init = NULL;
+                    Lista->end = NULL;
+                }
                 printf("\nIngrese cantidad de puntos a generar: ");
                 scanf("%ld", &n);
                 printf("Generando...\n");
@@ -202,38 +220,19 @@ int main()
             case 9:
                 printf("Listo para salir, entrar cualquier valor para terminar: ");
                 scanf("%d",&i);
+                if (Lista->init != NULL)
+                {
+                    liberar_memoria(Lista);
+                    Lista = (LE *)malloc(sizeof(LE));
+                    Lista->init = NULL;
+                    Lista->end = NULL;
+                }
                 break;
             default:
                 printf("Seleccion invalida, reintentar (9 para salir): ");
                 break;
         }
     } while (sel != 9);
-    
-    /*
-    LE *Lista;
-    Lista = (LE *)malloc(sizeof(LE));
-    Lista->init = NULL;
-    Lista->end = NULL;
-
-
-    leer_archivo(Lista);
-    view_list(Lista);
-    Quicksort_x(Lista->init, Lista->end);
-    printf("\n---------------------------\n");
-    printf("Lista ordenada en x:\n");
-    view_list(Lista);
-
-    /*
-    printf("\n---------------------------\n");
-    printf("Lista ordenada en y:\n");
-    Quicksort_y(Lista->init, Lista->end);
-    view_list(Lista);
-    
-    printf("\n---------------------------\n");
-    printf("Sublistado cotas 10<y<50:\n");
-    LE *subListado = sublistado(Lista, 10, 50, 0);
-    view_list(subListado);
-    */
     return 0;
 }
 
@@ -247,7 +246,7 @@ Bloque *Dividir_x(Bloque *left, Bloque *right)
     {
         if (ptr->x <= pivot->x)     // comparamos en coordenada x
         {
-            i = (i == NULL ? left : i->post);
+            i = (i == NULL ? left : i->post);  
             long temp_x = i->x;
             long temp_y = i->y;
             i->x = ptr->x;
@@ -332,12 +331,12 @@ LE *sublistado(LE *lista, long cota_inf, long cota_sup, int x)
     for (int i = 0; i < lista->n; i++)
     {
 
-        if (x == 1 && elem->x >= cota_inf && elem->x <= cota_sup)  
+        if (x == 1 && elem->x >= cota_inf && elem->x <= cota_sup)   // comparamos en x
         {
             add_element(subListado, elem->x, elem->y);
             n++;
         }
-        else if (x == 0 && elem->y >= cota_inf && elem->y <= cota_sup)
+        else if (x == 0 && elem->y >= cota_inf && elem->y <= cota_sup)  // comparamos en y
         {
             add_element(subListado, elem->x, elem->y);
             n++;
@@ -460,9 +459,28 @@ void add_random_element(LE *lista)
 void view_list(LE *lista)
 {
     Bloque *aux = lista->init;
+
     for (int i = 0; i < lista->n; i++)
     {
         printf("(x, y) = (%ld, %ld)\n", aux->x, aux->y);
         aux = aux->post;
     }
+}
+
+
+void liberar_memoria(LE *lista) 
+{   
+    if (lista)
+    {
+        Bloque *sig = lista->init;
+
+        for (int i = 0; i < lista->n; i++)
+        {
+            Bloque *ptr = sig;
+            sig = ptr->post;
+            free(sig);
+        }
+        free(lista);
+    }
+    
 }
